@@ -2,7 +2,30 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    (function () {
+      function syncAppHeight() {
+        var h =
+          (window.visualViewport && window.visualViewport.height) ||
+          window.innerHeight;
+        document.documentElement.style.setProperty(
+          "--app-height",
+          Math.round(h) + "px"
+        );
+      }
+      syncAppHeight();
+      window.addEventListener("resize", syncAppHeight, { passive: true });
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", syncAppHeight, {
+          passive: true,
+        });
+      }
+    })();
+  </script>
   <title>Pouya &amp; Ghazal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

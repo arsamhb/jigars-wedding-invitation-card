@@ -18,23 +18,35 @@
   --nude-text-soft: #9c8095;
   --intro-reveal-duration: 4s;
   --intro-reveal-delay: 0ms;
-  --intro-spiral-duration: 4.2s;
+  --intro-spiral-duration: 6s;
   --hero-expand-duration: 3s;
+  /* Viewport: JS sets --app-height; fallbacks cover static-load + older browsers */
+  --viewport-height: 100vh;
+  --viewport-height: 100svh;
+  --viewport-height: 100dvh;
+  --app-height: var(--viewport-height);
 }
 
 /* ==========================================================================
    Page shell
    ========================================================================== */
 
-html,
-body {
+html {
   height: 100%;
+  height: -webkit-fill-available;
+  height: var(--app-height);
 }
 
 body {
+  min-height: 100%;
+  min-height: -webkit-fill-available;
+  min-height: var(--app-height);
   color: var(--nude-text);
   background: var(--nude-bg);
   transition: background-color 0.9s ease;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body.is-after-spiral {
@@ -67,8 +79,8 @@ body.is-spiral-active .invitation {
 
 .intro-spiral-prelude__stage {
   position: relative;
-  width: min(72vmin, 28rem);
-  height: min(72vmin, 28rem);
+  width: min(72vmin, 72svmin, 28rem);
+  height: min(72vmin, 72svmin, 28rem);
 }
 
 .intro-spiral-prelude__arm {
@@ -78,8 +90,7 @@ body.is-spiral-active .invitation {
   width: 0;
   height: 0;
   transform-origin: center;
-  --spiral-radius: 40.8vmin;
-  --spiral-turn: 0deg;
+  will-change: transform;
 }
 
 .intro-spiral-prelude__orb {
@@ -92,28 +103,30 @@ body.is-spiral-active .invitation {
   transform: translate(-50%, -50%);
   background: radial-gradient(
     circle at 42% 38%,
+    rgba(156, 128, 149, 0.18),
+    rgba(156, 128, 149, 0.07) 58%,
+    transparent 78%
+  );
+  background: radial-gradient(
+    circle at 42% 38%,
     color-mix(in srgb, var(--nude-text-soft) 18%, transparent),
     color-mix(in srgb, var(--nude-text-soft) 7%, transparent) 58%,
     transparent 78%
   );
   filter: blur(3px);
+  -webkit-filter: blur(3px);
   will-change: transform, opacity;
   animation: intro-spiral-orb-fade var(--intro-spiral-duration) ease-out forwards;
 }
 
 .intro-spiral-prelude__arm--a {
-  transform: rotate(var(--spiral-turn)) translateX(var(--spiral-radius));
-  animation:
-    intro-spiral-turn-a var(--intro-spiral-duration) linear forwards,
-    intro-spiral-close var(--intro-spiral-duration) cubic-bezier(0.33, 0, 0.12, 1) forwards;
+  transform: rotate(0deg) translateX(40.8vmin);
+  animation: intro-spiral-arm-a var(--intro-spiral-duration) linear forwards;
 }
 
 .intro-spiral-prelude__arm--b {
-  --spiral-turn: 180deg;
-  transform: rotate(var(--spiral-turn)) translateX(var(--spiral-radius));
-  animation:
-    intro-spiral-turn-b var(--intro-spiral-duration) linear forwards,
-    intro-spiral-close var(--intro-spiral-duration) cubic-bezier(0.33, 0, 0.12, 1) forwards;
+  transform: rotate(180deg) translateX(40.8vmin);
+  animation: intro-spiral-arm-b var(--intro-spiral-duration) linear forwards;
 }
 
 .intro-spiral-prelude__merge {
@@ -127,56 +140,65 @@ body.is-spiral-active .invitation {
   opacity: 0;
   background: radial-gradient(
     circle at 50% 50%,
+    rgba(156, 128, 149, 0.24),
+    rgba(156, 128, 149, 0.1) 62%,
+    transparent 82%
+  );
+  background: radial-gradient(
+    circle at 50% 50%,
     color-mix(in srgb, var(--nude-text-soft) 24%, transparent),
     color-mix(in srgb, var(--nude-text-soft) 10%, transparent) 62%,
     transparent 82%
   );
   filter: blur(4px);
+  -webkit-filter: blur(4px);
   animation: intro-spiral-merge var(--intro-spiral-duration) ease-out forwards;
 }
 
-@property --spiral-radius {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-@property --spiral-turn {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes intro-spiral-turn-a {
+/* Transform-based keyframes (no @property) — works in Safari, Samsung Internet, etc. */
+@keyframes intro-spiral-arm-a {
   0% {
-    --spiral-turn: 0deg;
+    transform: rotate(0deg) translateX(40.8vmin);
+  }
+
+  22% {
+    transform: rotate(108deg) translateX(38.4vmin);
+  }
+
+  48% {
+    transform: rotate(324deg) translateX(24vmin);
+  }
+
+  68% {
+    transform: rotate(540deg) translateX(8vmin);
   }
 
   78%,
   100% {
-    --spiral-turn: 720deg;
+    transform: rotate(720deg) translateX(0);
   }
 }
 
-@keyframes intro-spiral-turn-b {
+@keyframes intro-spiral-arm-b {
   0% {
-    --spiral-turn: 180deg;
+    transform: rotate(180deg) translateX(40.8vmin);
+  }
+
+  22% {
+    transform: rotate(288deg) translateX(38.4vmin);
+  }
+
+  48% {
+    transform: rotate(504deg) translateX(24vmin);
+  }
+
+  68% {
+    transform: rotate(720deg) translateX(8vmin);
   }
 
   78%,
   100% {
-    --spiral-turn: 900deg;
-  }
-}
-
-@keyframes intro-spiral-close {
-  0% {
-    --spiral-radius: 40.8vmin;
-  }
-
-  78%,
-  100% {
-    --spiral-radius: 0;
+    transform: rotate(900deg) translateX(0);
   }
 }
 
@@ -222,10 +244,12 @@ body.is-spiral-active .invitation {
   }
 
   86% {
+    background-color: #eee8eb;
     background-color: color-mix(in srgb, var(--nude-panel) 38%, var(--nude-bg));
   }
 
   92% {
+    background-color: #f2eaed;
     background-color: color-mix(in srgb, var(--nude-panel) 72%, var(--nude-bg));
   }
 
@@ -242,8 +266,8 @@ body.is-spiral-active .invitation {
   display: flex;
   flex-direction: row;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: var(--app-height);
+  height: var(--app-height);
 }
 
 .invitation__copy-column {
@@ -251,6 +275,8 @@ body.is-spiral-active .invitation {
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: stretch;
+  min-height: 0;
   padding: max(1rem, env(safe-area-inset-top)) 0 max(1rem, env(safe-area-inset-bottom));
   background: var(--nude-panel);
   overflow: hidden;
@@ -262,6 +288,7 @@ body.is-spiral-active .invitation {
   align-items: center;
   justify-content: center;
   height: 100%;
+  min-height: 0;
 }
 
 /* ==========================================================================
@@ -270,6 +297,7 @@ body.is-spiral-active .invitation {
 
 .headline-stack {
   --headline-font-size: clamp(2.5rem, 11vh, 7rem);
+  --headline-font-size: clamp(2.5rem, 11dvh, 7rem);
   position: relative;
   display: flex;
   flex-direction: column-reverse;
@@ -282,9 +310,14 @@ body.is-spiral-active .invitation {
   line-height: 1.3;
   color: var(--nude-text);
   writing-mode: vertical-lr;
+  -webkit-writing-mode: vertical-lr;
   text-orientation: mixed;
+  -webkit-text-orientation: mixed;
   transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
   font-size: var(--headline-font-size, clamp(2.5rem, 11vh, 7rem));
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
 }
 
 .headline--the-offset {
@@ -319,10 +352,15 @@ body.is-spiral-active .invitation {
   letter-spacing: 0.04em;
   color: var(--nude-text-soft);
   writing-mode: vertical-rl;
+  -webkit-writing-mode: vertical-rl;
   text-orientation: mixed;
+  -webkit-text-orientation: mixed;
   white-space: nowrap;
   transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
   flex-shrink: 0;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
 }
 
 .event-details.event-details--typing {
@@ -353,16 +391,19 @@ body.is-spiral-active .invitation {
 
 .invitation__photo-column {
   position: relative;
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  align-self: stretch;
   min-width: 0;
-  min-height: 100dvh;
+  min-height: 0;
+  height: 100%;
 }
 
 .photo-frame {
   overflow: hidden;
   min-height: 0;
+  flex-shrink: 0;
 }
 
 .photo-frame--compact {
@@ -371,6 +412,7 @@ body.is-spiral-active .invitation {
 
 .photo-frame--featured {
   flex: 1 1 40%;
+  min-height: 0;
 }
 
 .photo-frame img {
@@ -379,6 +421,7 @@ body.is-spiral-active .invitation {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  -webkit-object-fit: cover;
 }
 
 /* ==========================================================================
@@ -390,14 +433,13 @@ body.is-spiral-active .invitation {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+  background: var(--nude-panel);
   background: color-mix(in srgb, var(--nude-panel) 100%, transparent);
   opacity: 1;
-  transition: opacity var(--intro-reveal-duration) ease-in;
-}
-
-.intro-reveal-overlay {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
   transition: opacity var(--intro-reveal-duration) ease-in var(--intro-reveal-delay);
 }
 
@@ -441,7 +483,7 @@ body.is-spotlight-active {
   top: var(--reveal-top, 0);
   left: var(--reveal-left, 0);
   width: var(--reveal-width, 100vw);
-  height: var(--reveal-height, 100vh);
+  height: var(--reveal-height, var(--app-height));
   overflow: hidden;
   z-index: 1;
   background: var(--nude-text-soft);
@@ -456,7 +498,7 @@ body.is-spotlight-active {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: var(--app-height);
 }
 
 .photo-spotlight__viewport img {
@@ -465,12 +507,15 @@ body.is-spotlight-active {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  -webkit-object-fit: cover;
   opacity: 1;
   transition: filter var(--hero-expand-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: -webkit-filter var(--hero-expand-duration) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .photo-spotlight--expanded .photo-spotlight__viewport img {
   filter: brightness(0.42);
+  -webkit-filter: brightness(0.42);
 }
 
 .photo-spotlight__dim {
@@ -485,6 +530,7 @@ body.is-spotlight-active {
   background: var(--nude-text-soft);
   opacity: 0.42;
   filter: brightness(0.42);
+  -webkit-filter: brightness(0.42);
 }
 
 .photo-spotlight__message {
@@ -498,7 +544,7 @@ body.is-spotlight-active {
   padding: max(1.5rem, env(safe-area-inset-top)) 2rem max(1.5rem, env(safe-area-inset-bottom));
   max-width: 36rem;
   margin-inline: auto;
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   font-size: clamp(1.05rem, 2.8vw, 1.35rem);
   font-weight: 400;
   line-height: 1.65;

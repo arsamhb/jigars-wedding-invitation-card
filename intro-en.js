@@ -39,6 +39,36 @@
   let spotlightStarted = false;
   let headlineFitFrame = 0;
 
+  // ===========================================================================
+  // Viewport height (iOS Safari / mobile browser toolbar quirks)
+  // ===========================================================================
+
+  function getViewportHeight() {
+    if (window.visualViewport && window.visualViewport.height > 0) {
+      return window.visualViewport.height;
+    }
+    return window.innerHeight || document.documentElement.clientHeight;
+  }
+
+  function syncAppHeight() {
+    document.documentElement.style.setProperty(
+      "--app-height",
+      `${Math.round(getViewportHeight())}px`
+    );
+  }
+
+  syncAppHeight();
+  window.addEventListener("resize", syncAppHeight, { passive: true });
+  window.addEventListener("orientationchange", syncAppHeight, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", syncAppHeight, {
+      passive: true,
+    });
+    window.visualViewport.addEventListener("scroll", syncAppHeight, {
+      passive: true,
+    });
+  }
+
   document.documentElement.style.setProperty(
     "--intro-reveal-duration",
     `${REVEAL_MS}ms`
@@ -86,7 +116,7 @@
   // ===========================================================================
 
   function getHeadlineFitTargets() {
-    const viewportHeight = document.documentElement.clientHeight;
+    const viewportHeight = getViewportHeight();
     const copySection = headlineStack?.closest(".invitation__copy-column");
     const maxWidth = copySection
       ? copySection.clientWidth * HEADLINE_WIDTH_RATIO
@@ -154,7 +184,10 @@
 
   function scheduleHeadlineFit() {
     cancelAnimationFrame(headlineFitFrame);
-    headlineFitFrame = requestAnimationFrame(fitHeadlineStack);
+    headlineFitFrame = requestAnimationFrame(() => {
+      syncAppHeight();
+      fitHeadlineStack();
+    });
   }
 
   // ===========================================================================
