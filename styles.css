@@ -592,3 +592,18 @@ body.is-spotlight-active {
     opacity: 1;
   }
 }
+
+
+/* /* ==========================================================================  */
+
+.red-border {
+  border: 1px solid red;
+}
+
+.blue-border {
+  border: 1px solid blue;
+}
+
+.green-border {
+  border: 1px solid green;
+}
