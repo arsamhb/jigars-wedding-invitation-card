@@ -298,44 +298,39 @@ body.is-spiral-active .invitation {
 .headline-stack {
   --headline-font-size: clamp(2.5rem, 11vh, 7rem);
   --headline-font-size: clamp(2.5rem, 11dvh, 7rem);
+  --headline-the-gap-before: 0.39em;
+  --headline-the-gap-after: 0.12em;
+  --headline-the-offset: 0.2em;
   position: relative;
   display: flex;
-  flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  overflow: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding: 0.15em;
-  contain: layout paint;
-  isolation: isolate;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
+  transform: rotate(90deg) rotate(180deg);
+  -webkit-transform: rotate(90deg) rotate(180deg);
+  transform-origin: center center;
+  -webkit-transform-origin: center center;
+}
+
+.headline-stack__column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .headline {
   line-height: 1.3;
   color: var(--nude-text);
-  writing-mode: vertical-lr;
-  -webkit-writing-mode: vertical-lr;
-  text-orientation: mixed;
-  -webkit-text-orientation: mixed;
-  transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
-  transform-origin: center center;
-  -webkit-transform-origin: center center;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  white-space: nowrap;
   font-size: var(--headline-font-size, clamp(2.5rem, 11vh, 7rem));
   font-kerning: normal;
   -webkit-font-smoothing: antialiased;
 }
 
 .headline--the-offset {
-  transform: rotate(180deg) translate(-0.16em, 0em);
-  -webkit-transform: rotate(180deg) translate(-0.16em, 0em);
-  margin-top: 0.11em;
-  margin-bottom: 0.4em;
+  margin-inline-start: var(--headline-the-gap-before);
+  margin-inline-end: var(--headline-the-gap-after);
+  margin-top: var(--headline-the-offset);
 }
 
 .headline--script {
