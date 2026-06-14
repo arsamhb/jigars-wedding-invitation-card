@@ -304,6 +304,13 @@ body.is-spiral-active .invitation {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.15em;
+  contain: layout paint;
+  isolation: isolate;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 
 .headline {
@@ -315,6 +322,10 @@ body.is-spiral-active .invitation {
   -webkit-text-orientation: mixed;
   transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
+  transform-origin: center center;
+  -webkit-transform-origin: center center;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   font-size: var(--headline-font-size, clamp(2.5rem, 11vh, 7rem));
   font-kerning: normal;
   -webkit-font-smoothing: antialiased;
