@@ -271,6 +271,7 @@ body.is-spiral-active .invitation {
 }
 
 .invitation__copy-column {
+  position: relative;
   flex: 0 0 38%;
   display: flex;
   align-items: center;
@@ -350,12 +351,13 @@ body.is-spiral-active .invitation {
    ========================================================================== */
 
 .event-details {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
   font-family: "M PLUS 1p", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 1rem;
-  margin-right: 1rem;
-  margin-left: -0.5rem;
   letter-spacing: 0.04em;
   color: var(--nude-text-soft);
   writing-mode: vertical-rl;
@@ -363,8 +365,8 @@ body.is-spiral-active .invitation {
   text-orientation: mixed;
   -webkit-text-orientation: mixed;
   white-space: nowrap;
-  transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
+  transform: translateY(-50%) rotate(180deg);
+  -webkit-transform: translateY(-50%) rotate(180deg);
   flex-shrink: 0;
   font-kerning: normal;
   -webkit-font-smoothing: antialiased;
@@ -566,17 +568,6 @@ body.is-spotlight-active {
   opacity: 1;
 }
 
-.photo-spotlight__message:not(.photo-spotlight__message--done)::after {
-  content: "|";
-  margin-left: 0.05em;
-  opacity: 0.85;
-  animation: typing-caret-blink 0.9s step-end infinite;
-}
-
-.photo-spotlight__message--done::after {
-  content: none;
-}
-
 /* ==========================================================================
    Reduced motion overrides
    ========================================================================== */
@@ -599,3 +590,4 @@ body.is-spotlight-active {
     opacity: 1;
   }
 }
+

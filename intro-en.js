@@ -53,13 +53,15 @@
   function syncAppHeight() {
     document.documentElement.style.setProperty(
       "--app-height",
-      `${Math.round(getViewportHeight())}px`
+      `${Math.round(getViewportHeight())}px`,
     );
   }
 
   syncAppHeight();
   window.addEventListener("resize", syncAppHeight, { passive: true });
-  window.addEventListener("orientationchange", syncAppHeight, { passive: true });
+  window.addEventListener("orientationchange", syncAppHeight, {
+    passive: true,
+  });
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", syncAppHeight, {
       passive: true,
@@ -71,15 +73,15 @@
 
   document.documentElement.style.setProperty(
     "--intro-reveal-duration",
-    `${REVEAL_MS}ms`
+    `${REVEAL_MS}ms`,
   );
   document.documentElement.style.setProperty(
     "--intro-spiral-duration",
-    `${SPIRAL_MS}ms`
+    `${SPIRAL_MS}ms`,
   );
   document.documentElement.style.setProperty(
     "--hero-expand-duration",
-    `${SPOTLIGHT_EXPAND_MS}ms`
+    `${SPOTLIGHT_EXPAND_MS}ms`,
   );
 
   // ===========================================================================
@@ -196,7 +198,7 @@
 
   function waitForImages() {
     const images = Array.from(
-      document.querySelectorAll(".invitation__photo-column img")
+      document.querySelectorAll(".invitation__photo-column img"),
     );
     return Promise.all(
       images.map((img) => {
@@ -205,7 +207,7 @@
           img.addEventListener("load", resolve, { once: true });
           img.addEventListener("error", resolve, { once: true });
         });
-      })
+      }),
     );
   }
 
@@ -216,7 +218,7 @@
         : Promise.resolve();
 
     return Promise.all([fontsReady, waitForImages()]).then(
-      () => new Promise((resolve) => requestAnimationFrame(resolve))
+      () => new Promise((resolve) => requestAnimationFrame(resolve)),
     );
   }
 
@@ -297,7 +299,7 @@
       eventDetailsEl.dataset.eventDetails || eventDetailsEl.textContent.trim();
     eventDetailsEl.classList.remove(
       "event-details--typing",
-      "event-details--done"
+      "event-details--done",
     );
 
     if (prefersReducedMotion()) {
@@ -375,7 +377,10 @@
       if (typingStarted) return;
       typingStarted = true;
       viewport.removeEventListener("transitionend", onExpanded);
-      window.setTimeout(() => beginSpotlightTyping(overlay, messageEl), PAUSE_MS);
+      window.setTimeout(
+        () => beginSpotlightTyping(overlay, messageEl),
+        PAUSE_MS,
+      );
     };
 
     const onExpanded = (event) => {
