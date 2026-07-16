@@ -17,8 +17,31 @@
   const HEADLINE_FIT_TOLERANCE = 0.25;
 
   const FEATURED_PHOTO_ID = "featured-photo";
-  const SPOTLIGHT_MESSAGE =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.";
+
+  // System to configure texts so they can be shown in correct language, font, and direction
+  const TEXTS = {
+    spotlight: {
+      content: `هر کدام از آدم‌های عزیز زندگی، سهمی در خاطرات زیبای ما دارند؛ و شما بی‌شک یکی از همان عزیزانی هستید که دوست داریم در مهم‌ترین روز زندگی‌مان کنارمان باشید.
+
+با افتخار و از صمیم قلب، شما را به جشن آغاز زندگی مشترکمان دعوت می‌کنیم تا شادی این شب را با حضورتان کامل‌تر کنید.
+
+حضور شما برای ما ارزشمندترین هدیه است و امیدواریم در کنار هم، شبی پر از لبخند، عشق و خاطرات ماندگار بسازیم.
+
+خواهشمندیم در صورتی که امکان حضور در مراسم را ندارید، لطفاً تا یک هفته آینده ما را مطلع فرمایید تا بتوانیم برنامه‌ریزی مراسم را با دقت بیشتری انجام دهیم.
+
+مشتاقانه منتظر دیدار شما و ساختن یکی از زیباترین خاطرات زندگی‌مان در کنار شما هستیم`,
+      lang: "fa",
+      dir: "rtl",
+    },
+    addressCta: {
+      content: "آدرس",
+      lang: "fa",
+      dir: "rtl",
+    },
+  };
+
+  const ADDRESS_PAGE_URL = "address.html";
+  const ADDRESS_CTA_DELAY_MS = 2600;
 
   // ===========================================================================
   // DOM refs
@@ -333,10 +356,36 @@
   // Photo spotlight
   // ===========================================================================
 
+  function revealAddressCta(overlay) {
+    if (overlay.querySelector(".photo-spotlight__address")) return;
+
+    const cta = document.createElement("a");
+    cta.className = "photo-spotlight__address";
+    cta.href = ADDRESS_PAGE_URL;
+    cta.setAttribute("lang", TEXTS.addressCta.lang);
+    cta.setAttribute("dir", TEXTS.addressCta.dir);
+    cta.innerHTML = `
+      <svg class="photo-spotlight__address-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21z"></path>
+        <circle cx="12" cy="10.5" r="2.4"></circle>
+      </svg>
+      <span class="photo-spotlight__address-label">${TEXTS.addressCta.content}</span>
+    `;
+
+    overlay.appendChild(cta);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        cta.classList.add("photo-spotlight__address--visible");
+      });
+    });
+  }
+
   function beginSpotlightTyping(overlay, messageEl) {
     overlay.classList.add("photo-spotlight--typing");
-    typeText(messageEl, SPOTLIGHT_MESSAGE, SPOTLIGHT_CHAR_MS, () => {
+    typeText(messageEl, TEXTS.spotlight.content, SPOTLIGHT_CHAR_MS, () => {
       messageEl.classList.add("photo-spotlight__message--done");
+      window.setTimeout(() => revealAddressCta(overlay), ADDRESS_CTA_DELAY_MS);
     });
   }
 
@@ -348,12 +397,16 @@
     const overlay = document.createElement("div");
     overlay.className = "photo-spotlight";
     overlay.setAttribute("role", "presentation");
+    
+    // Apply lang and dir to the spotlight based on config
+    const textConfig = TEXTS.spotlight;
+    
     overlay.innerHTML = `
       <div class="photo-spotlight__viewport">
         <img src="" alt="" decoding="async">
         <div class="photo-spotlight__dim" aria-hidden="true"></div>
       </div>
-      <p class="photo-spotlight__message" aria-live="polite"></p>
+      <p class="photo-spotlight__message" aria-live="polite" lang="${textConfig.lang}" dir="${textConfig.dir}"></p>
     `;
 
     const viewport = overlay.querySelector(".photo-spotlight__viewport");
