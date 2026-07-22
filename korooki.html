@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    (function () {
+      function syncAppHeight() {
+        var h =
+          (window.visualViewport && window.visualViewport.height) ||
+          window.innerHeight;
+        document.documentElement.style.setProperty(
+          "--app-height",
+          Math.round(h) + "px"
+        );
+      }
+      syncAppHeight();
+      window.addEventListener("resize", syncAppHeight, { passive: true });
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", syncAppHeight, {
+          passive: true,
+        });
+      }
+    })();
+  </script>
+  <title>کروکی · Pouya &amp; Ghazal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=WindSong:wght@400;500&family=M+PLUS+1p:wght@100;300;400&family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="address-body">
+  <main class="address address--korooki">
+    <a class="address__back" href="address.html" lang="fa" dir="rtl" aria-label="بازگشت به آدرس">
+      <svg class="address__back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 6l6 6-6 6"></path>
+      </svg>
+      <span>بازگشت</span>
+    </a>
+
+    <h1 class="address__title">کروکی</h1>
+    <p class="address__subtitle">باغ تالار تماشا</p>
+
+    <figure class="address__korooki" aria-label="کروکی مسیر باغ تالار تماشا">
+      <img src="korooki.png" alt="کروکی مسیر رسیدن به باغ تالار تماشا" decoding="async">
+      <span class="address__korooki-wash" aria-hidden="true"></span>
+    </figure>
+  </main>
+</body>
+</html>

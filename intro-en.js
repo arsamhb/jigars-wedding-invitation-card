@@ -8,7 +8,7 @@
   const SPIRAL_MS = 4200;
   const EVENT_DETAILS_CHAR_MS = 110;
   const SPOTLIGHT_EXPAND_MS = 4000;
-  const SPOTLIGHT_CHAR_MS = 55;
+  const SPOTLIGHT_CHAR_MS = 32;
 
   const HEADLINE_HEIGHT_RATIO = 0.9;
   const HEADLINE_WIDTH_RATIO = 0.92;
@@ -397,10 +397,10 @@
     const overlay = document.createElement("div");
     overlay.className = "photo-spotlight";
     overlay.setAttribute("role", "presentation");
-    
+
     // Apply lang and dir to the spotlight based on config
     const textConfig = TEXTS.spotlight;
-    
+
     overlay.innerHTML = `
       <div class="photo-spotlight__viewport">
         <img src="" alt="" decoding="async">

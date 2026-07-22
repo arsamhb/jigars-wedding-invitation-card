@@ -724,11 +724,25 @@ body.is-spotlight-active {
   line-height: 1.2;
 }
 
+.address__subtitle {
+  margin-top: -0.85rem;
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+  color: var(--nude-text-soft);
+  line-height: 1.4;
+}
+
 .address__text {
   font-size: clamp(1rem, 3.8vw, 1.2rem);
   line-height: 2;
   color: var(--nude-text-soft);
   white-space: pre-line;
+}
+
+.address__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .address__map-link {
@@ -761,6 +775,43 @@ body.is-spotlight-active {
   width: 1.2em;
   height: 1.2em;
   flex-shrink: 0;
+}
+
+.address--korooki {
+  width: min(96%, 42rem);
+  max-width: 100%;
+  min-width: 0;
+  gap: 1.25rem;
+}
+
+.address__korooki {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--nude-panel);
+  box-shadow: 0 18px 40px -24px rgba(106, 122, 74, 0.45);
+  isolation: isolate;
+}
+
+.address__korooki img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+  filter: contrast(0.92) brightness(0.98) sepia(0.12);
+}
+
+.address__korooki-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--nude-panel) 28%, transparent);
+  mix-blend-mode: multiply;
 }
 
 /* ==========================================================================
