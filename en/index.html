@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    (function () {
+      function syncAppHeight() {
+        var h =
+          (window.visualViewport && window.visualViewport.height) ||
+          window.innerHeight;
+        document.documentElement.style.setProperty(
+          "--app-height",
+          Math.round(h) + "px"
+        );
+      }
+      syncAppHeight();
+      window.addEventListener("resize", syncAppHeight, { passive: true });
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", syncAppHeight, {
+          passive: true,
+        });
+      }
+    })();
+  </script>
+  <title>Pouya &amp; Ghazal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=WindSong:wght@400;500&family=M+PLUS+1p:wght@100;300;400&family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-intro-pending is-spiral-active">
+  <div class="intro-spiral-prelude" aria-hidden="true">
+    <div class="intro-spiral-prelude__stage">
+      <div class="intro-spiral-prelude__arm intro-spiral-prelude__arm--a">
+        <span class="intro-spiral-prelude__orb"></span>
+      </div>
+      <div class="intro-spiral-prelude__arm intro-spiral-prelude__arm--b">
+        <span class="intro-spiral-prelude__orb"></span>
+      </div>
+      <span class="intro-spiral-prelude__merge"></span>
+    </div>
+  </div>
+  <main class="invitation">
+    <section class="invitation__copy-column ">
+      <div class="copy-row ">
+        <div class="headline-stack ">
+          <div class="headline-stack__column ">
+            <h1 class="headline headline--sans">SAVE</h1>
+            <h1 class="headline headline--script headline--the-offset">the</h1>
+            <h1 class="headline headline--sans">DATE</h1>
+          </div>
+          <div class="intro-reveal-overlay" aria-hidden="true"></div>
+        </div>
+        <p class="event-details" data-event-details="August 29, 2026 · Pooya &amp; Ghazal" lang="en" dir="ltr">August 29, 2026 · Pooya &amp; Ghazal</p>
+      </div>
+    </section>
+
+    <section class="invitation__photo-column" aria-label="Photos">
+      <figure class="photo-frame photo-frame--compact">
+        <img src="IMG_3901.jpg" alt="" loading="eager">
+      </figure>
+      <figure class="photo-frame photo-frame--featured" id="featured-photo">
+        <img src="IMG_3947.jpg" alt="" loading="eager">
+      </figure>
+      <figure class="photo-frame photo-frame--compact">
+        <img src="IMG_3905.jpg" alt="" loading="eager">
+      </figure>
+      <div class="intro-reveal-overlay" aria-hidden="true"></div>
+    </section>
+  </main>
+  <script src="intro-en.js" defer></script>
+</body>
+</html>

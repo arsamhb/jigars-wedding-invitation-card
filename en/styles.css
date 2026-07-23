@@ -573,7 +573,7 @@ body.is-spotlight-active {
   align-items: center;
   justify-content: center;
   margin: 0;
-  padding: max(1.5rem, env(safe-area-inset-top)) 2rem max(1.5rem, env(safe-area-inset-bottom));
+  padding: max(1.5rem, env(safe-area-inset-top)) 2rem max(7.5rem, calc(env(safe-area-inset-bottom) + 6rem));
   max-width: 36rem;
   margin-inline: auto;
   font-size: clamp(1.05rem, 2.8vw, 1.35rem);

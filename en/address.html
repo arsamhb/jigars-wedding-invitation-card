@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    (function () {
+      function syncAppHeight() {
+        var h =
+          (window.visualViewport && window.visualViewport.height) ||
+          window.innerHeight;
+        document.documentElement.style.setProperty(
+          "--app-height",
+          Math.round(h) + "px"
+        );
+      }
+      syncAppHeight();
+      window.addEventListener("resize", syncAppHeight, { passive: true });
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", syncAppHeight, {
+          passive: true,
+        });
+      }
+    })();
+  </script>
+  <title>Address · Pouya &amp; Ghazal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=WindSong:wght@400;500&family=M+PLUS+1p:wght@100;300;400&family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="address-body">
+  <main class="address">
+    <a class="address__back" href="index.html" lang="en" dir="ltr" aria-label="Back">
+      <svg class="address__back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6"></path>
+      </svg>
+      <span>Back</span>
+    </a>
+
+    <figure class="address__photo">
+      <img src="IMG_3947.jpg" alt="Tamasha Garden Hall">
+    </figure>
+
+    <h1 class="address__title">Tamasha Garden Hall</h1>
+
+    <p class="address__text">Fath Highway (westbound), Old Karaj Road, Kilometer 14 service lane, Iran Khodro intersection, toward Shahrak-e Danesh, Tavallaei Street, Laleh Alley, end of the alley, No. 3</p>
+
+    <div class="address__actions">
+      <a class="address__map-link" href="https://www.google.com/maps/place/Tamasha+Garden+Hall/@35.6993326,51.1834654,17z/data=!3m1!4b1!4m6!3m5!1s0x3f8dfbdd324c76e1:0x72a9f5f7cf08e6ee!8m2!3d35.6993326!4d51.1834654!16s%2Fg%2F11fq87d4g2" target="_blank" rel="noopener noreferrer">
+        <svg class="address__map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 21s-6.5-5.4-6.5-10.2A6.5 6.5 0 0 1 12 4.3a6.5 6.5 0 0 1 6.5 6.5C18.5 15.6 12 21 12 21z"></path>
+          <circle cx="12" cy="10.5" r="2.4"></circle>
+        </svg>
+        <span>View on Map</span>
+      </a>
+
+      <a class="address__map-link" href="korooki.html">
+        <svg class="address__map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3.5 6.5l5.5-2.5 6 3 5.5-2.5v13l-5.5 2.5-6-3-5.5 2.5v-13z"></path>
+          <path d="M9 4v13"></path>
+          <path d="M15 7.5v13"></path>
+        </svg>
+        <span>Route Map</span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

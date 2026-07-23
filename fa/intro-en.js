@@ -8,7 +8,7 @@
   const SPIRAL_MS = 4200;
   const EVENT_DETAILS_CHAR_MS = 110;
   const SPOTLIGHT_EXPAND_MS = 4000;
-  const SPOTLIGHT_CHAR_MS = 32;
+  const SPOTLIGHT_CHAR_MS = 25;
 
   const HEADLINE_HEIGHT_RATIO = 0.9;
   const HEADLINE_WIDTH_RATIO = 0.92;
@@ -23,13 +23,15 @@
     spotlight: {
       content: `هر کدام از آدم‌های عزیز زندگی، سهمی در خاطرات زیبای ما دارند؛ و شما بی‌شک یکی از همان عزیزانی هستید که دوست داریم در مهم‌ترین روز زندگی‌مان کنارمان باشید.
 
-با افتخار و از صمیم قلب، شما را به جشن آغاز زندگی مشترکمان دعوت می‌کنیم تا شادی این شب را با حضورتان کامل‌تر کنید.
-
-حضور شما برای ما ارزشمندترین هدیه است و امیدواریم در کنار هم، شبی پر از لبخند، عشق و خاطرات ماندگار بسازیم.
+با افتخار و از صمیم قلب، شما را به جشن آغاز زندگی مشترکمان دعوت می‌کنیم تا شادی این شب را با حضورتان کامل‌تر کنیم.
 
 خواهشمندیم در صورتی که امکان حضور در مراسم را ندارید، لطفاً تا یک هفته آینده ما را مطلع فرمایید تا بتوانیم برنامه‌ریزی مراسم را با دقت بیشتری انجام دهیم.
 
-مشتاقانه منتظر دیدار شما و ساختن یکی از زیباترین خاطرات زندگی‌مان در کنار شما هستیم`,
+مشتاقانه منتظر دیدار شما و ساختن یکی از زیباترین خاطرات زندگی‌مان در کنار شما هستیم
+
+۷ شهریور ساعت ۱۹:۳۰
+
+پویا و غزل`,
       lang: "fa",
       dir: "rtl",
     },
@@ -42,6 +44,30 @@
 
   const ADDRESS_PAGE_URL = "address.html";
   const ADDRESS_CTA_DELAY_MS = 2600;
+
+  // Set when leaving for the address page; consumed on return so the visitor
+  // lands straight on the message state instead of replaying the whole intro.
+  const RETURN_FLAG = "pg-return-to-message";
+
+  function markReturningFromAddress() {
+    try {
+      sessionStorage.setItem(RETURN_FLAG, "1");
+    } catch (e) {
+      /* sessionStorage unavailable — fall back to replaying the intro */
+    }
+  }
+
+  function consumeReturnFromAddress() {
+    try {
+      if (sessionStorage.getItem(RETURN_FLAG) === "1") {
+        sessionStorage.removeItem(RETURN_FLAG);
+        return true;
+      }
+    } catch (e) {
+      /* sessionStorage unavailable */
+    }
+    return false;
+  }
 
   // ===========================================================================
   // DOM refs
@@ -356,7 +382,30 @@
   // Photo spotlight
   // ===========================================================================
 
-  function revealAddressCta(overlay) {
+  function buildSpotlightOverlay() {
+    const overlay = document.createElement("div");
+    overlay.className = "photo-spotlight";
+    overlay.setAttribute("role", "presentation");
+
+    // Apply lang and dir to the spotlight based on config
+    const textConfig = TEXTS.spotlight;
+
+    overlay.innerHTML = `
+      <div class="photo-spotlight__viewport">
+        <img src="" alt="" decoding="async">
+        <div class="photo-spotlight__dim" aria-hidden="true"></div>
+      </div>
+      <p class="photo-spotlight__message" aria-live="polite" lang="${textConfig.lang}" dir="${textConfig.dir}"></p>
+    `;
+
+    const img = overlay.querySelector(".photo-spotlight__viewport img");
+    img.src = sourceImg.currentSrc || sourceImg.src;
+    img.alt = sourceImg.alt || "";
+
+    return overlay;
+  }
+
+  function revealAddressCta(overlay, instant) {
     if (overlay.querySelector(".photo-spotlight__address")) return;
 
     const cta = document.createElement("a");
@@ -372,7 +421,16 @@
       <span class="photo-spotlight__address-label">${TEXTS.addressCta.content}</span>
     `;
 
+    // Remember that the visitor is heading to the address page, so returning
+    // brings them straight back to this message state.
+    cta.addEventListener("click", markReturningFromAddress);
+
     overlay.appendChild(cta);
+
+    if (instant) {
+      cta.classList.add("photo-spotlight__address--visible");
+      return;
+    }
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -394,27 +452,10 @@
     spotlightStarted = true;
 
     const rect = featuredPhoto.getBoundingClientRect();
-    const overlay = document.createElement("div");
-    overlay.className = "photo-spotlight";
-    overlay.setAttribute("role", "presentation");
-
-    // Apply lang and dir to the spotlight based on config
-    const textConfig = TEXTS.spotlight;
-
-    overlay.innerHTML = `
-      <div class="photo-spotlight__viewport">
-        <img src="" alt="" decoding="async">
-        <div class="photo-spotlight__dim" aria-hidden="true"></div>
-      </div>
-      <p class="photo-spotlight__message" aria-live="polite" lang="${textConfig.lang}" dir="${textConfig.dir}"></p>
-    `;
+    const overlay = buildSpotlightOverlay();
 
     const viewport = overlay.querySelector(".photo-spotlight__viewport");
-    const img = overlay.querySelector(".photo-spotlight__viewport img");
     const messageEl = overlay.querySelector(".photo-spotlight__message");
-
-    img.src = sourceImg.currentSrc || sourceImg.src;
-    img.alt = sourceImg.alt || "";
 
     viewport.style.setProperty("--reveal-top", `${rect.top}px`);
     viewport.style.setProperty("--reveal-left", `${rect.left}px`);
@@ -454,10 +495,55 @@
   }
 
   // ===========================================================================
+  // Restore (returning from the address page)
+  // ===========================================================================
+
+  // Rebuilds the final message state instantly — no spiral, no reveal, no
+  // typing — so a visitor returning from the address page sees the text right
+  // away instead of waiting through the whole intro again.
+  function restoreMessageState() {
+    finishSpiralPrelude();
+    document.body.classList.remove("is-intro-pending", "is-spiral-active");
+    document.body.classList.add("is-intro-revealing");
+
+    const eventDetailsText =
+      eventDetailsEl.dataset.eventDetails || eventDetailsEl.textContent.trim();
+    eventDetailsEl.textContent = eventDetailsText;
+    eventDetailsEl.classList.add(
+      "event-details--typing",
+      "event-details--done",
+    );
+
+    spotlightStarted = true;
+
+    const overlay = buildSpotlightOverlay();
+    // Append with the final classes already present so the browser paints the
+    // end state directly — transitions only fire on change, so nothing animates.
+    overlay.classList.add(
+      "photo-spotlight--expanded",
+      "photo-spotlight--typing",
+    );
+
+    const messageEl = overlay.querySelector(".photo-spotlight__message");
+    messageEl.textContent = TEXTS.spotlight.content;
+    messageEl.classList.add("photo-spotlight__message--done");
+
+    document.body.classList.add("is-spotlight-active");
+    document.body.appendChild(overlay);
+
+    revealAddressCta(overlay, true);
+  }
+
+  // ===========================================================================
   // Init
   // ===========================================================================
 
   async function init() {
+    if (consumeReturnFromAddress()) {
+      restoreMessageState();
+      return;
+    }
+
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
     }
