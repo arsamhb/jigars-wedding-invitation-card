@@ -30,9 +30,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=WindSong:wght@400;500&family=M+PLUS+1p:wght@100;300;400&family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../assets/styles.css">
 </head>
-<body class="is-intro-pending is-spiral-active">
+<body class="is-start-pending is-intro-pending is-spiral-active">
   <div class="intro-spiral-prelude" aria-hidden="true">
     <div class="intro-spiral-prelude__stage">
       <div class="intro-spiral-prelude__arm intro-spiral-prelude__arm--a">
@@ -61,17 +61,34 @@
 
     <section class="invitation__photo-column" aria-label="Photos">
       <figure class="photo-frame photo-frame--compact">
-        <img src="IMG_3901.jpg" alt="" loading="eager">
+        <img src="../assets/IMG_3901.jpg" alt="" loading="eager">
       </figure>
       <figure class="photo-frame photo-frame--featured" id="featured-photo">
-        <img src="IMG_3947.jpg" alt="" loading="eager">
+        <img src="../assets/IMG_3947.jpg" alt="" loading="eager">
       </figure>
       <figure class="photo-frame photo-frame--compact">
-        <img src="IMG_3905.jpg" alt="" loading="eager">
+        <img src="../assets/IMG_3905.jpg" alt="" loading="eager">
       </figure>
       <div class="intro-reveal-overlay" aria-hidden="true"></div>
     </section>
   </main>
-  <script src="intro-en.js" defer></script>
+  <script>
+    window.PG_INVITE = {
+      spotlight: {
+        content: "We're so excited to celebrate our ceremony with the people we love most, and it wouldn't be the same without you! We'd be so happy to have you with us as we say \"I do\" and celebrate this special day together.\n\nTo those who are unable to join us, please know you'll be dearly missed. We'll be carrying your love and well wishes with us on our special day.\n\nIf you could kindly let us know by next week whether you'll be able to join us, we'd really appreciate it.\n\nSaturday, August 29 at 7:30 PM\n\nWith love,\nGhazal and Pooya",
+        lang: "en",
+        dir: "ltr",
+      },
+      addressCta: {
+        content: "Address",
+        lang: "en",
+        dir: "ltr",
+      },
+      startLabel: "Click to begin",
+      startLang: "en",
+      startDir: "ltr",
+    };
+  </script>
+  <script src="../assets/intro.js" defer></script>
 </body>
 </html>

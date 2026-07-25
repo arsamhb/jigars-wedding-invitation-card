@@ -17,33 +17,24 @@
   const HEADLINE_FIT_TOLERANCE = 0.25;
 
   const FEATURED_PHOTO_ID = "featured-photo";
+  const SONG_URL = "../assets/song.mp3";
 
-  // System to configure texts so they can be shown in correct language, font, and direction
+  const invite = window.PG_INVITE || {};
   const TEXTS = {
-    spotlight: {
-      content: `هر کدام از آدم‌های عزیز زندگی، سهمی در خاطرات زیبای ما دارند؛ و شما بی‌شک یکی از همان عزیزانی هستید که دوست داریم در مهم‌ترین روز زندگی‌مان کنارمان باشید.
-
-با افتخار و از صمیم قلب، شما را به جشن آغاز زندگی مشترکمان دعوت می‌کنیم تا شادی این شب را با حضورتان کامل‌تر کنیم.
-
-خواهشمندیم در صورتی که امکان حضور در مراسم را ندارید، لطفاً تا یک هفته آینده ما را مطلع فرمایید تا بتوانیم برنامه‌ریزی مراسم را با دقت بیشتری انجام دهیم.
-
-مشتاقانه منتظر دیدار شما و ساختن یکی از زیباترین خاطرات زندگی‌مان در کنار شما هستیم
-
-۷ شهریور ساعت ۱۹:۳۰
-
-پویا و غزل`,
-      lang: "fa",
-      dir: "rtl",
+    spotlight: invite.spotlight || {
+      content: "",
+      lang: "en",
+      dir: "ltr",
     },
-    addressCta: {
-      content: "آدرس",
-      lang: "fa",
-      dir: "rtl",
+    addressCta: invite.addressCta || {
+      content: "Address",
+      lang: "en",
+      dir: "ltr",
     },
   };
 
   const ADDRESS_PAGE_URL = "address.html";
-  const ADDRESS_CTA_DELAY_MS = 2600;
+  const ADDRESS_CTA_DELAY_MS = 1500;
 
   // Set when leaving for the address page; consumed on return so the visitor
   // lands straight on the message state instead of replaying the whole intro.
@@ -87,6 +78,7 @@
 
   let spotlightStarted = false;
   let headlineFitFrame = 0;
+  let bgMusic = null;
 
   // ===========================================================================
   // Viewport height (iOS Safari / mobile browser toolbar quirks)
@@ -387,7 +379,6 @@
     overlay.className = "photo-spotlight";
     overlay.setAttribute("role", "presentation");
 
-    // Apply lang and dir to the spotlight based on config
     const textConfig = TEXTS.spotlight;
 
     overlay.innerHTML = `
@@ -421,8 +412,6 @@
       <span class="photo-spotlight__address-label">${TEXTS.addressCta.content}</span>
     `;
 
-    // Remember that the visitor is heading to the address page, so returning
-    // brings them straight back to this message state.
     cta.addEventListener("click", markReturningFromAddress);
 
     overlay.appendChild(cta);
@@ -498,10 +487,8 @@
   // Restore (returning from the address page)
   // ===========================================================================
 
-  // Rebuilds the final message state instantly — no spiral, no reveal, no
-  // typing — so a visitor returning from the address page sees the text right
-  // away instead of waiting through the whole intro again.
   function restoreMessageState() {
+    document.body.classList.remove("is-start-pending");
     finishSpiralPrelude();
     document.body.classList.remove("is-intro-pending", "is-spiral-active");
     document.body.classList.add("is-intro-revealing");
@@ -517,8 +504,6 @@
     spotlightStarted = true;
 
     const overlay = buildSpotlightOverlay();
-    // Append with the final classes already present so the browser paints the
-    // end state directly — transitions only fire on change, so nothing animates.
     overlay.classList.add(
       "photo-spotlight--expanded",
       "photo-spotlight--typing",
@@ -535,15 +520,72 @@
   }
 
   // ===========================================================================
+  // Start gate + music
+  // ===========================================================================
+
+  function createBackgroundMusic() {
+    const audio = new Audio(SONG_URL);
+    audio.loop = true;
+    audio.preload = "auto";
+    return audio;
+  }
+
+  function startMusic() {
+    if (!bgMusic) {
+      bgMusic = createBackgroundMusic();
+    }
+    const playPromise = bgMusic.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {
+        /* Autoplay may still fail in rare cases; intro continues anyway */
+      });
+    }
+  }
+
+  function dismissStartGate(gate) {
+    document.body.classList.remove("is-start-pending");
+    if (gate && gate.parentNode) {
+      gate.remove();
+    }
+  }
+
+  function waitForStartGate() {
+    return new Promise((resolve) => {
+      const gate = document.createElement("div");
+      gate.className = "start-gate";
+      gate.setAttribute("role", "dialog");
+      gate.setAttribute("aria-modal", "true");
+
+      const label = invite.startLabel || "Click to begin";
+      const lang = invite.startLang || "en";
+      const dir = invite.startDir || "ltr";
+
+      gate.innerHTML = `
+        <button type="button" class="start-gate__btn" lang="${lang}" dir="${dir}">
+          ${label}
+        </button>
+      `;
+
+      const btn = gate.querySelector(".start-gate__btn");
+
+      const onStart = () => {
+        btn.removeEventListener("click", onStart);
+        startMusic();
+        dismissStartGate(gate);
+        resolve();
+      };
+
+      btn.addEventListener("click", onStart);
+      document.body.appendChild(gate);
+      btn.focus();
+    });
+  }
+
+  // ===========================================================================
   // Init
   // ===========================================================================
 
-  async function init() {
-    if (consumeReturnFromAddress()) {
-      restoreMessageState();
-      return;
-    }
-
+  async function runIntro() {
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
     }
@@ -557,6 +599,16 @@
     await runIntroSequence();
     await delay(PAUSE_MS);
     startPhotoSpotlight();
+  }
+
+  async function init() {
+    if (consumeReturnFromAddress()) {
+      restoreMessageState();
+      return;
+    }
+
+    await waitForStartGate();
+    await runIntro();
   }
 
   init();

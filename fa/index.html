@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
@@ -30,9 +30,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=WindSong:wght@400;500&family=M+PLUS+1p:wght@100;300;400&family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../assets/styles.css">
 </head>
-<body class="is-intro-pending is-spiral-active">
+<body class="is-start-pending is-intro-pending is-spiral-active">
   <div class="intro-spiral-prelude" aria-hidden="true">
     <div class="intro-spiral-prelude__stage">
       <div class="intro-spiral-prelude__arm intro-spiral-prelude__arm--a">
@@ -55,23 +55,40 @@
           </div>
           <div class="intro-reveal-overlay" aria-hidden="true"></div>
         </div>
-        <p class="event-details" data-event-details="۷ شهریور ۱۴۰۵ . پویا و غزل" lang="fa" dir="rtl">۷ شهریور ۱۴۰۵ . پویا و غزل</p> 
+        <p class="event-details" data-event-details="۷ شهریور ۱۴۰۵ . پویا و غزل" lang="fa" dir="ltr">۷ شهریور ۱۴۰۵ . پویا و غزل</p>
       </div>
     </section>
 
     <section class="invitation__photo-column" aria-label="Photos">
       <figure class="photo-frame photo-frame--compact">
-        <img src="IMG_3901.jpg" alt="" loading="eager">
+        <img src="../assets/IMG_3901.jpg" alt="" loading="eager">
       </figure>
       <figure class="photo-frame photo-frame--featured" id="featured-photo">
-        <img src="IMG_3947.jpg" alt="" loading="eager">
+        <img src="../assets/IMG_3947.jpg" alt="" loading="eager">
       </figure>
       <figure class="photo-frame photo-frame--compact">
-        <img src="IMG_3905.jpg" alt="" loading="eager">
+        <img src="../assets/IMG_3905.jpg" alt="" loading="eager">
       </figure>
       <div class="intro-reveal-overlay" aria-hidden="true"></div>
     </section>
   </main>
-  <script src="intro-en.js" defer></script>
+  <script>
+    window.PG_INVITE = {
+      spotlight: {
+        content: "هر کدام از آدم‌های عزیز زندگی، سهمی در خاطرات زیبای ما دارند؛ و شما بی‌شک یکی از همان عزیزانی هستید که دوست داریم در مهم‌ترین روز زندگی‌مان کنارمان باشید.\n\nبا افتخار و از صمیم قلب، شما را به جشن آغاز زندگی مشترکمان دعوت می‌کنیم تا شادی این شب را با حضورتان کامل‌تر کنیم.\n\nخواهشمندیم در صورتی که امکان حضور در مراسم را ندارید، لطفاً تا یک هفته آینده ما را مطلع فرمایید تا بتوانیم برنامه‌ریزی مراسم را با دقت بیشتری انجام دهیم.\n\nمشتاقانه منتظر دیدار شما و ساختن یکی از زیباترین خاطرات زندگی‌مان در کنار شما هستیم\n\n۷ شهریور ساعت ۱۹:۳۰\n\nپویا و غزل",
+        lang: "fa",
+        dir: "rtl",
+      },
+      addressCta: {
+        content: "آدرس",
+        lang: "fa",
+        dir: "rtl",
+      },
+      startLabel: "برای شروع لمس کنید",
+      startLang: "fa",
+      startDir: "rtl",
+    };
+  </script>
+  <script src="../assets/intro.js" defer></script>
 </body>
 </html>

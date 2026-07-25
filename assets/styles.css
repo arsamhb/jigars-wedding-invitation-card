@@ -82,6 +82,66 @@ body.is-spiral-active .invitation {
 }
 
 /* ==========================================================================
+   Start gate (tap to begin + unlock audio)
+   ========================================================================== */
+
+body.is-start-pending {
+  overflow: hidden;
+  background-color: var(--nude-panel);
+}
+
+body.is-start-pending .invitation,
+body.is-start-pending .intro-spiral-prelude {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+body.is-start-pending .intro-spiral-prelude,
+body.is-start-pending .intro-spiral-prelude * {
+  animation-play-state: paused;
+}
+
+.start-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  display: grid;
+  place-items: center;
+  padding: max(1.5rem, env(safe-area-inset-top)) 1.5rem
+    max(1.5rem, env(safe-area-inset-bottom));
+  background: var(--nude-panel);
+}
+
+.start-gate__btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--nude-text);
+  font-size: clamp(1.15rem, 4.2vw, 1.45rem);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  padding: 0.85rem 0.5rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.35s ease, opacity 0.35s ease;
+}
+
+.start-gate__btn:hover,
+.start-gate__btn:focus-visible {
+  color: var(--nude-text-soft);
+  outline: none;
+}
+
+.start-gate__btn[lang="fa"] {
+  font-family: "Noto Sans Arabic", sans-serif;
+  letter-spacing: 0;
+}
+
+.start-gate__btn[lang="en"] {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+/* ==========================================================================
    Spiral prelude (pre-reveal)
    ========================================================================== */
 
